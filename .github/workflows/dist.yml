@@ -25,6 +25,10 @@ jobs:
       - name: Build app
         run: npm run build -- --historyMode=hash --pathPrefix=./
 
+      - name: Enable runtime-config
+        run: |
+          sed -i 's/<!--RC//;s/RC-->//' dist/index.html
+
       - name: Archive build output
         run: |
           cd dist
