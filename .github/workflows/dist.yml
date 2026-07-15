@@ -32,11 +32,11 @@ jobs:
       - name: Archive build output
         run: |
           cd dist
-          zip -r ../dist.zip .
+          zip -r ../stac-browser.dist.zip .
 
       - name: Upload build to release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist.zip
+          files: stac-browser.dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
