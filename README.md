@@ -48,7 +48,7 @@ The catalog section of [STAC Index](https://stacindex.org) is also built on top 
 
 Setting up STAC Browser can be as simple as this:
 
-1. Download the [latest release](https://github.com/radiantearth/stac-browser/releases/latest/download/stac-browser.dist.zip) distribution and unzip it
+1. Download the [latest release](https://github.com/republique-et-canton-de-geneve/stac-browser/releases/latest/download/stac-browser.dist.zip) distribution and unzip it
 2. If you wish to configure STAC browser, edit `runtime-config.js`
 3. Serve this with a webserver (by running `python -m http.server 8000` or `npx http-server -p 8000` from the folder if just testing locally)
 
