@@ -41,12 +41,12 @@
     "password": "Kata Sandi",
     "required": "Autentikasi diperlukan",
     "schemeTypes": {
-      "http": "HTTP {scheme}",
-      "s3": "S3",
-      "signedUrl": "URL Tertanda",
-      "oauth2": "OAuth 2",
       "apiKey": "Kunci API",
-      "openIdConnect": "OpenID Connect"
+      "http": "HTTP {scheme}",
+      "oauth2": "OAuth 2",
+      "openIdConnect": "OpenID Connect",
+      "s3": "S3",
+      "signedUrl": "URL Tertanda"
     },
     "title": "Autentikasi",
     "unauthorized": "Anda tidak memiliki izin untuk mengakses data ini. Silakan masuk.",
@@ -71,6 +71,7 @@
     "true": "ya"
   },
   "copy": "Salin",
+  "copyErrors": {},
   "default": "Default",
   "defaultWithValue": "Default ({value})",
   "deprecated": "Usang",
@@ -110,7 +111,9 @@
     "serverError": "Server mengalami masalah. @:errors.contactProvider",
     "unauthorized": "Permintaan tidak memiliki kredensial, misalnya token API. Silakan berikan kredensial Anda dan coba lagi."
   },
+  "exampleCode": {},
   "featureExperimental": "Fitur ini masih eksperimental dan mungkin memberikan hasil yang tidak terduga!",
+  "features": {},
   "fullscreen": {
     "exit": "Keluar dari Layar Penuh",
     "show": "Lihat Layar Penuh"
@@ -147,25 +150,20 @@
     "noneAvailableForCollection": "Tidak ada item yang tersedia untuk koleksi ini.",
     "showFilter": "Tampilkan Filter"
   },
-  "leaflet": {
-    "close": "Tutup",
-    "noFeatureProperties": "Tidak ada data tambahan yang tersedia untuk fitur ini.",
-    "stayLayer": {
-      "error": "Maaf, menambahkan data ke peta gagal."
-    },
-    "zoom": {
-      "in": {
-        "description": "Perbesar",
-        "label": "+"
-      },
-      "out": {
-        "description": "Perkecil",
-        "label": "-"
-      }
-    }
-  },
   "loading": "Memuat...",
   "map": "Peta",
+  "mapping": {
+    "attribution": {},
+    "bboxSelect": {
+      "error": {}
+    },
+    "layers": {},
+    "location": {},
+    "zoom": {
+      "in": {},
+      "out": {}
+    }
+  },
   "messageForSchemaError": "{message}, untuk skema {schemaPath}",
   "metadata": {
     "general": "Umum",
@@ -187,6 +185,7 @@
     "previous": "‹ Sebelumnya"
   },
   "poweredBy": "Didukung oleh {link}",
+  "programming": {},
   "protocol": {
     "azure": "Microsoft Azure",
     "file": "sistem file (lokal)",
@@ -217,9 +216,10 @@
   "search": {
     "addCollections": "Tekan enter untuk menambahkan koleksi",
     "addFilter": "Tambah filter",
+    "additionalFilters": "Filter tambahan",
     "addItemIds": "Tekan enter untuk menambahkan ID Item",
     "addSearchTerm": "Tekan enter untuk menambahkan istilah pencarian",
-    "additionalFilters": "Filter tambahan",
+    "arrayInput": {},
     "dateDescription": "Semua waktu dalam Coordinated Universal Time (UTC).",
     "enterCollections": "Masukkan satu atau lebih ID Koleksi...",
     "enterItemIds": "Masukkan satu atau lebih ID Item...",
@@ -253,11 +253,6 @@
     "placeholder": "Cari...",
     "selectCollections": "Pilih satu atau beberapa koleksi...",
     "selectForItemSearch": "Pilih untuk Pencarian Item",
-    "sortOptions": {
-      "datetime": "Tanggal dan Waktu",
-      "id": "ID",
-      "title": "Judul"
-    },
     "spatialExtent": "Cakupan Spasial",
     "tabs": {
       "collections": "Cari Koleksi",
@@ -305,8 +300,8 @@
       "message": "{title} tersedia di {url}",
       "sharePageWithOthers": "Bagikan URL halaman ini di mana pun Anda suka:",
       "title": "Bagikan",
-      "x": "X (Twitter)",
-      "withOthers": "Bagikan halaman ini dengan orang lain"
+      "withOthers": "Bagikan halaman ini dengan orang lain",
+      "x": "X (Twitter)"
     },
     "stacExtension": "Ekstensi STAC",
     "stacVersion": "Versi STAC",
