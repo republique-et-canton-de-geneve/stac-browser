@@ -81,13 +81,18 @@ export default defineConfig(async ({ mode }) => {
   const defaultConfig = (await import(pathToFileURL(defaultConfigPath).href)).default ?? {};
   const externalConfig = (await import(pathToFileURL(externalConfigPath).href)).default ?? {};
   const config = Object.assign({}, defaultConfig, externalConfig, env);
+  const minimal = mode === "minimal";
 
   return ({
     base: config.pathPrefix,
     build: {
-      sourcemap: mode !== "minimal",
+      sourcemap: !minimal,
+      cssCodeSplit: !minimal,
       rollupOptions: {
         external: ["fs/promises"],
+        output: {
+          inlineDynamicImports: minimal,
+        },
       },
     },
     css: {
