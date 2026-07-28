@@ -6,31 +6,31 @@
     <ErrorAlert v-if="globalError" dismissible class="global-error" v-bind="globalError" @close="hideError" />
     <Sidebar v-if="sidebar !== null" v-model="sidebar" />
     <!-- Header -->
-    <header>
+    <header ref="header" :class="{ scrolled }">
       <b-row class="site">
         <b-col md="12">
           <nav class="actions navigation">
             <b-button-group v-if="canSearch || !isServerSelector">
-              <b-button v-if="!isServerSelector" variant="primary" :title="$t('browse')" @click="sidebar = !sidebar">
+              <b-button v-if="!isServerSelector" variant="header" :title="$t('browse')" @click="sidebar = !sidebar">
                 <b-icon-list /><span class="button-label">{{ $t('browse') }}</span>
               </b-button>
-              <b-button v-if="canSearch" variant="primary" :to="searchBrowserLink" :title="$t('search.title')" :pressed="isSearchPage">
+              <b-button v-if="canSearch" variant="header" :to="searchBrowserLink" :title="$t('search.title')" :pressed="isSearchPage">
                 <b-icon-search /><span class="button-label">{{ $t('search.title') }}</span>
               </b-button>
-              <b-button v-if="root" variant="primary" id="popover-root-btn" tabindex="0">
+              <b-button v-if="root" variant="header" id="popover-root-btn" tabindex="0">
                 <b-icon-database /><span class="button-label">{{ serviceType }}</span>
               </b-button>
             </b-button-group>
           </nav>
           <div class="title">
             <StacLink v-if="root" :data="root">
-              <HeaderTitle ref="header" />
+              <HeaderTitle ref="headerTitle" />
             </StacLink>
-            <HeaderTitle v-else ref="header" />
+            <HeaderTitle v-else ref="headerTitle" />
           </div>
           <nav class="actions user">
             <b-button-group>
-              <b-button v-if="canAuthenticate" variant="primary" @click="logInOut" :title="authTitle">
+              <b-button v-if="canAuthenticate" variant="header" @click="logInOut" :title="authTitle">
                 <component :is="authIcon" /><span class="button-label">{{ authLabel }}</span>
               </b-button>
               <LanguageChooser
@@ -40,7 +40,7 @@
               />
               <b-button
                 v-if="!enforcedColorModeFromVueX || enforcedColorModeFromVueX === 'auto'"
-                variant="primary"
+                variant="header"
                 @click="toggleColorMode"
               >
                 <b-icon-sun v-if="colorMode === 'light'" :title="$t('switchToDarkMode')" />
@@ -61,10 +61,10 @@
               <b-button v-if="back" :to="selfBrowserLink" :title="$t('goBack.description', {type})" variant="outline-primary" size="sm">
                 <b-icon-arrow-left /><span class="button-label">{{ $t('goBack.label') }}</span>
               </b-button>
-              <b-button v-if="collectionLink" :to="toBrowserPath(collectionLink.href)" :title="collectionLinkTitle" variant="outline-primary" size="sm">
+              <b-button v-if="collectionLink" :to="toBrowserPath(collectionLink)" :title="collectionLinkTitle" variant="outline-primary" size="sm">
                 <b-icon-folder-symlink /><span class="button-label">{{ $t('goToCollection.label') }}</span>
               </b-button>
-              <b-button v-if="parentLink" :to="toBrowserPath(parentLink.href)" :title="parentLinkTitle" variant="outline-primary" size="sm">
+              <b-button v-if="parentLink" :to="toBrowserPath(parentLink)" :title="parentLinkTitle" variant="outline-primary" size="sm">
                 <b-icon-arrow-90deg-up /><span class="button-label">{{ $t('goToParent.label') }}</span>
               </b-button>
             </b-button-group>
@@ -93,7 +93,7 @@
     <b-popover
       v-if="root" id="popover-root" class="popover-large" target="popover-root-btn"
       placement="bottom" :title="serviceType" teleport-to="#stac-browser"
-      click focus :boundary-padding="10"
+      click focus :boundary-padding="10" strategy="fixed"
     >
       <RootStats />
     </b-popover>
@@ -170,7 +170,9 @@ export default defineComponent({
       sidebar: null,
       error: null,
       onDataLoaded: null,
-      isNavigatingLocale: false
+      isNavigatingLocale: false,
+      scrolled: false,
+      scrollListener: null
     };
   },
   computed: {
@@ -275,7 +277,7 @@ export default defineComponent({
             const state = Object.assign({}, this.stateQueryParameters);
             this.isNavigatingLocale = true;
             try {
-              await this.$router.push(this.toBrowserPath(link.href));
+              await this.$router.push(this.toBrowserPath(link));
             }
             catch (error) {
               if (!isNavigationFailure(error, NavigationFailureType.duplicated)) {
@@ -375,6 +377,16 @@ export default defineComponent({
     },
     colorMode(value) {
       this.$store.commit('setColorMode', value);
+    },
+    scrollListener(newValue, oldValue) {
+      if (newValue) {
+        window.addEventListener('scroll', newValue, { passive: true });
+        // Initialize once, e.g. when the page is loaded already scrolled down.
+        newValue();
+      }
+      else {
+        window.removeEventListener('scroll', oldValue);
+      }
     }
   },
   async created() {
@@ -409,8 +421,8 @@ export default defineComponent({
       this.$store.commit(resetOp);
       this.parseQuery(to);
 
-      if (this.$refs.header) {
-        this.$refs.header.updateUrl();
+      if (this.$refs.headerTitle) {
+        this.$refs.headerTitle.updateUrl();
       }
     });
 
@@ -436,6 +448,19 @@ export default defineComponent({
         evt.preventDefault();
       }
     });
+
+    // Add scroll listener to show header shadow only when scrolled (and header is sticky)
+    this.scrollListener = () => {
+      const header = this.$refs.header;
+      const isSticky = header && window.getComputedStyle(header).position === 'sticky';
+      const scrolled = Boolean(isSticky) && window.scrollY > 0;
+      if (scrolled !== this.scrolled) {
+        this.scrolled = scrolled;
+      }
+    };
+  },
+  beforeUnmount() {
+    this.scrollListener = null;
   },
   methods: {
     ...mapActions(['switchLocale', 'switchDataLocale']),
@@ -449,8 +474,7 @@ export default defineComponent({
         this.addAction(() => this.$store.dispatch('load', {
           url: this.url,
           show: true,
-          force: true,
-          noRetry: true
+          force: true
         }));
       }
       if (this.isLoggedIn) {
