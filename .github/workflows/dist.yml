@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build app
-        run: npm run build:minimal
+        run: DYNAMIC_CONFIG=true npm run build:minimal
 
       - name: Enable runtime-config
         run: |
