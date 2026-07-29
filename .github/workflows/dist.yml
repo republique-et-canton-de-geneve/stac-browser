@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build app
-        run: SB_pathPrefix="./" SB_historyMode=hash  npm run build:minimal
+        run: npm run build:minimal
 
       - name: Enable runtime-config
         run: |
