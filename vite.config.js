@@ -87,6 +87,22 @@ const resolveExternalConfigPath = (configFile) => {
   return configPath;
 };
 
+/**
+ * Returns the folder portion of a URL, preserving a trailing slash (to noramlize base path)
+ */
+const getFolder = (url) => {
+  const isAbsolute = url.startsWith("http://") || url.startsWith("https://");
+
+  // For absolute URLs, let URL resolve "." to the current directory.
+  if (isAbsolute) return new URL(".", new URL(url)).href;
+
+  // Relative paths that already end with "/" are already folder paths.
+  if (url.endsWith("/")) return url;
+
+  // Otherwise, remove the last path segment (the file) and keep the slash.
+  return url.replace(/\/[^/]*$/, "/");
+};
+
 export default defineConfig(async ({ mode }) => {
   const rawEnv = {
     ...loadEnv(mode, process.cwd(), ""),
@@ -106,7 +122,7 @@ export default defineConfig(async ({ mode }) => {
   const minimal = mode === "minimal";
 
   return ({
-    base: dynamicConfig ? "./" : config.pathPrefix,
+    base: dynamicConfig ? "./" : getFolder(config.pathPrefix),
     build: {
       sourcemap: !minimal,
       cssCodeSplit: !minimal,
