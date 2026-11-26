@@ -93,6 +93,8 @@ The override order for the configuration is:
   - [showFavorites](#showfavorites)
   - [showKeywordsInItemCards](#showkeywordsinitemcards)
   - [showKeywordsInCatalogCards](#showkeywordsincatalogcards)
+  - [showStacIdsInItemCards](#showstacidsinitemcards)
+  - [showStacIdsInCatalogCards](#showstacidsincatalogcards)
   - [defaultThumbnailSize](#defaultthumbnailsize)
 - [Metadata Retrieval](#metadata-retrieval)
   - [searchResultsPerPage](#searchresultsperpage)
@@ -648,6 +650,14 @@ Enables keywords in the lists of items if set to `true`. Defaults to `false`.
 ### showKeywordsInCatalogCards
 
 Enables keywords in the lists of catalogs/collections if set to `true`. Defaults to `false`.
+
+### showStacIdsForItems
+
+Enables display of stac IDs in the lists of items before the title if set to `true`. Useful when IDs are meaningful for end users. defaults to `false`.
+
+### showStacIdsForCollections
+
+Enables display of stac IDs in the lists of catalogs/collections before the title if set to `true`. Useful when IDs are meaningful for end users. defaults to `false`.
 
 ### defaultThumbnailSize
 
